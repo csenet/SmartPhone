@@ -22,8 +22,8 @@
                 console.log("Opend");
             });
             room.on('data', message => {
-                Push.create("tEST"));
-        });
+                Push.create("tEST");
+            });
         });
         $('#test').click(() => {
             room.send({ name: 'push', msg: 'data' });
