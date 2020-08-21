@@ -9,7 +9,19 @@
     <h1>Push.js Sample</h1>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/push.js/1.0.7/push.min.js"></script>
     <script type="text/javascript">
-        Push.create('Push 通知だよ！');
+        // WebSocket 接続を作成
+        const socket = new WebSocket('ws://192.168.0.34:8888');
+
+        // 接続が開いたときのイベント
+        socket.addEventListener('open', function (event) {
+            socket.send('Hello Server!');
+        });
+
+        // メッセージの待ち受け
+        socket.addEventListener('message', function (event) {
+            Push.create(event.data);
+            console.log('Message from server ', event.data);
+        });
     </script>
 </body>
 
