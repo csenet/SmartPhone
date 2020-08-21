@@ -8,20 +8,18 @@
 
     <h1>Push.js Sample</h1>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/push.js/1.0.7/push.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="https://skyway.io/dist/v2/0.3/peer.js"></script>
     <script type="text/javascript">
-        // WebSocket 接続を作成
-        const socket = new WebSocket('wss://192.168.0.34:3000');
-
-        // 接続が開いたときのイベント
-        socket.addEventListener('open', function (event) {
-            socket.send('Hello Server!');
+        var peer = new Peer({ key: 'f0a06d24-9737-457c-8039-48676d25d764', debug: 3 });
+        const room = peer.joinRoom('mesh_text_' + roomName);
+        room.on('open', function () {
+            connect(room);
+            connectedPeers['test'] = room;
         });
-
-        // メッセージの待ち受け
-        socket.addEventListener('message', function (event) {
-            Push.create(event.data);
-            console.log('Message from server ', event.data);
-        });
+        room.on('data', message => {
+            Push.create(message);
+        })
     </script>
 </body>
 
