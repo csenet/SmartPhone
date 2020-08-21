@@ -8,15 +8,23 @@
 
     <h1>Push.js Sample</h1>
     <script src="https://cdn.webrtc.ecl.ntt.com/skyway-latest.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/push.js/1.0.7/push.min.js"></script>
+
+    <button id="join">Join</button>
+    <button id="test">Push</button>
     <script type="text/javascript">
+        let room = null;
         var peer = new Peer({ key: 'f0a06d24-9737-457c-8039-48676d25d764', debug: 3 });
-        const room = peer.joinRoom('mesh_text_test');
-        room.on('open', function () {
-            connect(room);
+        $('#join').click(function () {
+            room = peer.joinRoom('mesh_text_test');
+            room.on('data', message => {
+                Push.create(message.data);
+            });
         });
-        room.on('data', message => {
-            Push.create(message);
-        })
+        $('#test').click(() => {
+            room.send({ name: 'push', msg: 'data' });
+        });
     </script>
 </body>
 
