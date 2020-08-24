@@ -2,43 +2,21 @@
 
 <head>
     <meta charset='utf-8'>
-    <title>socket.io</title>
+    <title>Hack U SmartPhone Sync</title>
 </head>
 
-<body>
-    <input type='text' id='msg_input' style='width:200px;' />
-    <button onclick='publishMessage();'>ツイート</button>
-    <div id='msg'></div>
-    <script src='./socket.io/socket.io.js'></script>
+<body id="main">
+    <h1>Hack U 振動連動</h1>
+    <p>振動に合わせて画面の色が変化します</p>
     <script type='text/javascript'>
-
-        var socketio = io();
-
-        socketio.on('connected', function (name) { });
-        socketio.on('publish', function (data) { addMessage(data.value); });
-        socketio.on('disconnect', function () { });
-
-        function start(name) {
-            socketio.emit('connected', name);
+        var socket = new WebSocket("ws://hacku.australiacentral.cloudapp.azure.com/");
+        var isBlocked = false;
+        socket.onmessage = (event) => {
+            backGround = document.getElementById("main");
+            backGround.style.backgroundColor = "red";
+            isBlocked = true;
+            setTimeout(() => { if (!isBlocked) { backGround.style.backgroundColor = "white"; } else { isBlocked = false; } }, 3000)
         }
-
-        function publishMessage() {
-            var textInput = document.getElementById('msg_input');
-            var msg = '[' + myName + ']' + textInput.value;
-            socketio.emit('publish', { value: 'hage' });
-            textInput.value = '';
-        }
-
-        function addMessage(msg) {
-            var domMeg = document.createElement('div');
-            domMeg.innerHTML = new Date().toLocaleTimeString() + ' ' + msg;
-            msgArea.appendChild(domMeg);
-        }
-
-        var msgArea = document.getElementById('msg');
-        var myName = Math.floor(Math.random() * 100) + 'さん';
-        addMessage('あなたは' + myName + 'として入室しました');
-        start(myName);
     </script>
 </body>
 
