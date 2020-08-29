@@ -11,9 +11,9 @@
     <script type='text/javascript'>
         var socket = new WebSocket("ws://hacku.australiacentral.cloudapp.azure.com/");
         var isBlocked = false;
+        backGround = document.getElementById("main");
         setInterval(() => { if (!isBlocked) { backGround.style.backgroundColor = "white"; } else { isBlocked = false; } }, 3000)
         socket.onmessage = (event) => {
-            backGround = document.getElementById("main");
             backGround.style.backgroundColor = "red";
             isBlocked = true;
         }
